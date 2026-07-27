@@ -1,0 +1,2051 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión - Micomunidad</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Background elements for depth and neon glow effects -->
+    <div class="bg-blur bg-blur-1"></div>
+    <div class="bg-blur bg-blur-2"></div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <div id="app">
+      <!-- 1. LOGIN CARD CONTAINER -->
+      <main id="login-section" class="card-section">
+        <div class="glass-card login-card" id="login-card">
+          <!-- Logo & Header -->
+          <div class="card-header">
+            <div class="logo-container">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <h1 class="app-title">Micomunidad</h1>
+            <p class="app-subtitle">Ingresa tus credenciales para acceder</p>
+          </div>
+
+          <!-- Login Form -->
+          <form id="login-form" novalidate>
+            <!-- Username Input -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <input 
+                  type="text" 
+                  id="identificadorAcceso" 
+                  name="identificadorAcceso" 
+                  required 
+                  placeholder=" " 
+                  autocomplete="username" 
+                />
+                <label for="identificadorAcceso">Usuario o Correo Electrónico</label>
+              </div>
+              <span class="error-message" id="error-username">El usuario es requerido.</span>
+            </div>
+
+            <!-- Password Input -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input 
+                  type="password" 
+                  id="contrasenaPlano" 
+                  name="contrasenaPlano" 
+                  required 
+                  placeholder=" " 
+                  autocomplete="current-password" 
+                />
+                <label for="contrasenaPlano">Contraseña</label>
+                <button type="button" id="toggle-password" class="btn-toggle-password" aria-label="Mostrar contraseña">
+                  <!-- Eye Icon (Show) -->
+                  <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <!-- Eye Off Icon (Hide) - Hidden by default -->
+                  <svg class="icon-eye-off hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                </button>
+              </div>
+              <span class="error-message" id="error-password">La contraseña es requerida.</span>
+            </div>
+
+            <!-- Options (Remember & Forgot) -->
+            <div class="form-options">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="remember-me" name="rememberMe" />
+                <span class="checkmark"></span>
+                <span class="label-text">Recordarme</span>
+              </label>
+              <a href="#" id="forgot-password" class="forgot-link">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="btn-submit" class="btn-submit">
+              <span class="btn-text">Iniciar Sesión</span>
+              <span class="loader-spinner hidden"></span>
+            </button>
+          </form>
+          <div class="card-footer" style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-secondary);">
+            ¿No tienes una cuenta? <a href="#" id="go-to-register" class="forgot-link">Regístrate aquí</a>
+            <div style="margin-top: 12px;">
+              <a href="#" id="link-resend-verify-flow" class="forgot-link">¿Registro pendiente? Verificar o reenviar código</a>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- 3. SOLICITAR RECUPERACION CARD -->
+      <section id="forgot-section" class="card-section hidden">
+        <div class="glass-card forgot-card" id="forgot-card">
+          <div class="card-header">
+            <div class="logo-container">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+            <h1 class="app-title">Recuperar Acceso</h1>
+            <p class="app-subtitle">Ingresa tu usuario o correo para enviarte un código de verificación</p>
+          </div>
+
+          <form id="forgot-form" novalidate>
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <input 
+                  type="text" 
+                  id="forgot-identificador" 
+                  name="forgotIdentificador" 
+                  required 
+                  placeholder=" " 
+                />
+                <label for="forgot-identificador">Usuario o Correo Electrónico</label>
+              </div>
+              <span class="error-message" id="error-forgot-username">El usuario es requerido.</span>
+            </div>
+
+            <button type="submit" id="btn-forgot-submit" class="btn-submit">
+              <span class="btn-text">Enviar Código</span>
+              <span class="loader-spinner hidden"></span>
+            </button>
+
+            <div class="form-footer" style="text-align: center; margin-top: 24px;">
+              <a href="#" class="btn-back-login forgot-link">Volver al Inicio de Sesión</a>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- 4. RESTABLECER CONTRASENA CARD -->
+      <section id="reset-section" class="card-section hidden">
+        <div class="glass-card reset-card" id="reset-card">
+          <div class="card-header">
+            <div class="logo-container">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+            <h1 class="app-title">Nueva Contraseña</h1>
+            <p class="app-subtitle">Ingresa el código enviado a tu correo y tu nueva contraseña</p>
+          </div>
+
+          <form id="reset-form" novalidate>
+            <!-- Username (Pre-filled / Readonly) -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <input 
+                  type="text" 
+                  id="reset-identificador" 
+                  name="resetIdentificador" 
+                  required 
+                  readonly 
+                  placeholder=" " 
+                />
+                <label for="reset-identificador">Usuario o Correo Electrónico</label>
+              </div>
+            </div>
+
+            <!-- Verification Code -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <input 
+                  type="text" 
+                  id="reset-code" 
+                  name="resetCode" 
+                  required 
+                  maxlength="6" 
+                  placeholder=" " 
+                  autocomplete="one-time-code" 
+                />
+                <label for="reset-code">Código de Verificación (6 dígitos)</label>
+              </div>
+              <span class="error-message" id="error-reset-code">El código de verificación es requerido (6 dígitos).</span>
+            </div>
+
+            <!-- New Password -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input 
+                  type="password" 
+                  id="reset-password" 
+                  name="resetPassword" 
+                  required 
+                  placeholder=" " 
+                  autocomplete="new-password" 
+                />
+                <label for="reset-password">Nueva Contraseña (mín. 8 caracteres)</label>
+                <button type="button" id="toggle-reset-password" class="btn-toggle-password" aria-label="Mostrar contraseña">
+                  <!-- Eye Icon (Show) -->
+                  <svg class="icon-eye-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <!-- Eye Off Icon (Hide) - Hidden by default -->
+                  <svg class="icon-eye-off-reset hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                </button>
+              </div>
+              <span class="error-message" id="error-reset-password">La contraseña debe tener mínimo 8 caracteres.</span>
+            </div>
+
+            <button type="submit" id="btn-reset-submit" class="btn-submit">
+              <span class="btn-text">Restablecer Contraseña</span>
+              <span class="loader-spinner hidden"></span>
+            </button>
+
+            <div class="form-footer" style="text-align: center; margin-top: 24px;">
+              <a href="#" class="btn-back-forgot forgot-link">Volver a Enviar Código</a>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- 5. REGISTRO CARD -->
+      <section id="register-section" class="card-section hidden">
+        <div class="glass-card register-card" id="register-card" style="max-width: 500px; margin: 0 auto;">
+          <div class="card-header">
+            <div class="logo-container">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="8.5" cy="7" r="4" />
+                <line x1="20" y1="8" x2="20" y2="14" />
+                <line x1="23" y1="11" x2="17" y2="11" />
+              </svg>
+            </div>
+            <h1 class="app-title">Crear Cuenta</h1>
+            <p class="app-subtitle">Completa el formulario para registrarte en Micomunidad</p>
+          </div>
+
+          <form id="register-form" novalidate>
+            <!-- Plan Selection Group -->
+            <div class="input-group">
+              <label class="info-label" style="margin-bottom: 10px; display: block; font-weight: 500; font-size: 12px; color: var(--text-secondary);">Selecciona tu Plan</label>
+              <div class="plan-cards-container" style="display: flex; gap: 12px; margin-bottom: 8px;">
+                <label class="plan-card-option" style="flex: 1; cursor: pointer; position: relative;">
+                  <input type="radio" name="idPlan" value="1" checked style="position: absolute; opacity: 0; width: 0; height: 0;" />
+                  <div class="plan-card-inner">
+                    <div class="plan-name" style="font-weight: 600; font-size: 14px;">Básico</div>
+                    <div class="plan-desc" style="font-size: 11px; margin-top: 4px;">Funciones esenciales</div>
+                  </div>
+                </label>
+                <label class="plan-card-option" style="flex: 1; cursor: pointer; position: relative;">
+                  <input type="radio" name="idPlan" value="2" style="position: absolute; opacity: 0; width: 0; height: 0;" />
+                  <div class="plan-card-inner">
+                    <div class="plan-name" style="font-weight: 600; font-size: 14px;">Full</div>
+                    <div class="plan-desc" style="font-size: 11px; margin-top: 4px;">Acceso completo</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Nombres -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <input type="text" id="register-nombres" name="nombres" required placeholder=" " />
+                <label for="register-nombres">Nombres</label>
+              </div>
+              <span class="error-message" id="error-register-nombres">Mínimo 2 caracteres requeridos.</span>
+            </div>
+
+            <!-- Apellido Paterno & Materno -->
+            <div style="display: flex; gap: 12px; width: 100%;">
+              <div class="input-group" style="flex: 1;">
+                <div class="input-wrapper">
+                  <input type="text" id="register-apellidoPaterno" name="apellidoPaterno" required placeholder=" " />
+                  <label for="register-apellidoPaterno" style="left: 14px;">Apellido Paterno</label>
+                </div>
+                <span class="error-message" id="error-register-paterno">Requerido.</span>
+              </div>
+              <div class="input-group" style="flex: 1;">
+                <div class="input-wrapper">
+                  <input type="text" id="register-apellidoMaterno" name="apellidoMaterno" placeholder=" " />
+                  <label for="register-apellidoMaterno" style="left: 14px;">Apellido Materno</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Correo Electrónico -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                <input type="email" id="register-correo" name="correoElectronico" required placeholder=" " />
+                <label for="register-correo">Correo Electrónico</label>
+              </div>
+              <span class="error-message" id="error-register-correo">Ingresa un correo electrónico válido.</span>
+            </div>
+
+            <!-- Teléfono Móvil -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+                <input type="tel" id="register-telefono" name="telefonoMovil" required placeholder=" " />
+                <label for="register-telefono">Teléfono Móvil</label>
+              </div>
+              <span class="error-message" id="error-register-telefono">El teléfono es requerido.</span>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input type="password" id="register-contrasena" name="contrasenaPlano" required placeholder=" " />
+                <label for="register-contrasena">Contraseña</label>
+                <button type="button" id="toggle-register-password" class="btn-toggle-password" aria-label="Mostrar contraseña">
+                  <svg class="icon-eye-reg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <svg class="icon-eye-off-reg hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                </button>
+              </div>
+              <span class="error-message" id="error-register-contrasena" style="line-height: 1.3;">
+                La contraseña debe tener mínimo 8 caracteres, incluir mayúscula, minúscula, número y carácter especial (@$!%*?&).
+              </span>
+            </div>
+
+            <button type="submit" id="btn-register-submit" class="btn-submit">
+              <span class="btn-text">Registrarse</span>
+              <span class="loader-spinner hidden"></span>
+            </button>
+
+            <div class="form-footer" style="text-align: center; margin-top: 24px;">
+              <a href="#" class="btn-back-login-reg forgot-link">¿Ya tienes cuenta? Inicia sesión</a>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- 6. VERIFICAR CODIGO REGISTRO CARD -->
+      <section id="verify-register-section" class="card-section hidden">
+        <div class="glass-card verify-register-card" id="verify-register-card">
+          <div class="card-header">
+            <div class="logo-container">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v4l3 3" />
+              </svg>
+            </div>
+            <h1 class="app-title">Verificar Cuenta</h1>
+            <p class="app-subtitle">Hemos enviado un código de verificación a tu correo</p>
+          </div>
+
+          <form id="verify-register-form" novalidate>
+            <!-- Verification Code -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <input 
+                  type="text" 
+                  id="verify-register-code" 
+                  name="verifyRegisterCode" 
+                  required 
+                  maxlength="6" 
+                  placeholder=" " 
+                  autocomplete="one-time-code" 
+                />
+                <label for="verify-register-code">Código de Verificación (6 dígitos)</label>
+              </div>
+              <span class="error-message" id="error-verify-register-code">El código de verificación es requerido (6 dígitos).</span>
+            </div>
+
+            <button type="submit" id="btn-verify-register-submit" class="btn-submit">
+              <span class="btn-text">Verificar Cuenta</span>
+              <span class="loader-spinner hidden"></span>
+            </button>
+
+            <div class="form-footer" style="display: flex; justify-content: center; gap: 16px; margin-top: 24px; font-size: 14px;">
+              <a href="#" id="btn-resend-verify-code" class="forgot-link">Reenviar Código</a>
+              <span style="color: var(--text-muted);">|</span>
+              <a href="#" class="btn-back-login-verify forgot-link">Volver al Login</a>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- 7. RETRIEVE REGISTER SESSION CARD -->
+      <section id="retrieve-register-section" class="card-section hidden">
+        <div class="glass-card retrieve-register-card" id="retrieve-register-card">
+          <div class="card-header">
+            <div class="logo-container">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v4l3 3"/>
+              </svg>
+            </div>
+            <h1 class="app-title">Verificación Pendiente</h1>
+            <p class="app-subtitle">Ingresa tus credenciales de registro para verificar tu cuenta o reenviar el código</p>
+          </div>
+
+          <form id="retrieve-register-form" novalidate>
+            <!-- Email -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <input type="email" id="retrieve-register-email" required placeholder=" " />
+                <label for="retrieve-register-email">Correo Electrónico</label>
+              </div>
+              <span class="error-message" id="error-retrieve-email">El correo electrónico es requerido.</span>
+            </div>
+
+            <!-- Password -->
+            <div class="input-group">
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input type="password" id="retrieve-register-password" required placeholder=" " />
+                <label for="retrieve-register-password">Contraseña</label>
+              </div>
+              <span class="error-message" id="error-retrieve-password">La contraseña es requerida.</span>
+            </div>
+
+            <button type="submit" id="btn-retrieve-register-submit" class="btn-submit">
+              <span class="btn-text">Cargar Verificación</span>
+              <span class="loader-spinner hidden"></span>
+            </button>
+
+            <div class="form-footer" style="display: flex; justify-content: center; margin-top: 24px; font-size: 14px;">
+              <a href="#" class="btn-back-login-retrieve forgot-link">Volver al Inicio de Sesión</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <!-- 2. SUCCESS DASHBOARD (ADMIN PORTAL) -->
+    <section id="dashboard-section" class="dashboard-layout hidden">
+      <!-- Sidebar Left -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 24px; height: 24px;">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+          <span class="sidebar-title">Micomunidad</span>
+        </div>
+
+
+        <nav class="sidebar-nav">
+          <button class="nav-item active" data-tab="inicio">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+              <rect x="3" y="3" width="7" height="9" />
+              <rect x="14" y="3" width="7" height="5" />
+              <rect x="14" y="12" width="7" height="9" />
+              <rect x="3" y="16" width="7" height="5" />
+            </svg>
+            <span>Inicio</span>
+          </button>
+          
+          <button class="nav-item" data-tab="clientes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            <span>Clientes</span>
+          </button>
+
+          <button class="nav-item" data-tab="colaboradores">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+              <path d="M6 21v-2a4 4 0 0 1 4-4h4m1 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+            </svg>
+            <span>Colaboradores</span>
+          </button>
+
+          <button class="nav-item" data-tab="roles">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>Roles</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button id="btn-logout" class="sidebar-logout-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+        <!-- Top Header -->
+        <header class="content-header">
+          <div class="header-left">
+            <button id="btn-menu-toggle" class="btn-menu-toggle" aria-label="Toggle Menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+            <h2 id="current-tab-title" class="current-tab-title">Inicio</h2>
+          </div>
+          
+          <div class="header-center">
+            <div class="client-selector-wrapper combobox" id="client-combobox">
+              <div class="combobox-trigger">
+                <svg class="selector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                <span class="selected-client-name" id="selected-client-display">Seleccione Cliente...</span>
+                <span class="combobox-arrow"></span>
+              </div>
+              <div class="combobox-dropdown hidden" id="client-combobox-dropdown">
+                <div class="combobox-search-container">
+                  <input type="text" id="client-combobox-search" placeholder="Buscar cliente o RUT..." autocomplete="off" />
+                  <button class="combobox-search-clear hidden" id="client-combobox-clear" type="button" aria-label="Limpiar búsqueda">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+                <ul class="combobox-options" id="client-combobox-options">
+                  <!-- Dynamic options render here -->
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <div class="user-pill">
+              <span class="user-pill-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <span class="user-pill-email" id="user-pill-email">-</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Dynamic Content Body -->
+        <div class="content-body">
+          
+          <!-- TAB 1: INICIO -->
+          <div id="tab-inicio" class="tab-pane active">
+            <div class="modules-section">
+              <h3 class="modules-section-title">Módulos Premium Disponibles</h3>
+              <div class="modules-row">
+                
+                <!-- Card 1: Portafolio de Inversión -->
+                <div class="module-card" id="module-portfolio">
+                  <div class="module-card-img" style="background-image: url('/portfolio_cover.png');"></div>
+                  <div class="module-card-overlay">
+                    <div class="module-card-content">
+                      <span class="module-badge">Activo</span>
+                      <h4 class="module-title">Portafolio de Inversión</h4>
+                      <p class="module-desc">Monitoreo, análisis y optimización de activos financieros en tiempo real.</p>
+                      <button class="btn-module-action">Ingresar</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 2: Análisis de Mercado & IA -->
+                <div class="module-card locked">
+                  <div class="module-card-img" style="background-image: url('/market_ai_cover.png');"></div>
+                  <div class="module-card-overlay">
+                    <div class="module-card-content">
+                      <span class="module-badge locked">Próximamente</span>
+                      <h4 class="module-title">Análisis de Mercado & IA</h4>
+                      <p class="module-desc">Predicción de tendencias de mercado utilizando modelos predictivos de Machine Learning.</p>
+                      <button class="btn-module-action disabled" disabled>Bloqueado</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 3: Reportes & Balances -->
+                <div class="module-card locked">
+                  <div class="module-card-img" style="background-image: url('/reports_cover.png');"></div>
+                  <div class="module-card-overlay">
+                    <div class="module-card-content">
+                      <span class="module-badge locked">Próximamente</span>
+                      <h4 class="module-title">Reportes & Balances</h4>
+                      <p class="module-desc">Generación consolidada de auditorías financieras y balances anuales.</p>
+                      <button class="btn-module-action disabled" disabled>Bloqueado</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Token Box -->
+            <div class="glass-card token-box-card" style="margin-top: 24px; display: none !important;">
+              <div class="token-container">
+                <div class="token-header">
+                  <span style="font-weight: 500; font-size: 14px; color: var(--text-primary);">Token JWT de Sesión Activa</span>
+                  <button id="btn-copy-token" class="btn-copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    Copiar Token
+                  </button>
+                </div>
+                <textarea id="token-display" class="token-textarea" readonly style="height: 100px; margin-top: 10px;"></textarea>
+              </div>
+              <div style="margin-top: 12px; font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between;">
+                <span>ID Cuenta: <strong id="account-id-display" style="color: var(--text-secondary);">-</strong></span>
+                <span>ID Usuario: <strong id="user-display" style="color: var(--text-secondary);">-</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: PORTFOLIO MANAGEMENT -->
+          <div id="tab-portafolio" class="tab-pane">
+            <div class="portfolio-header-container">
+              <div class="portfolio-client-info">
+                <div class="portfolio-client-avatar" id="portfolio-client-avatar">CL</div>
+                <div>
+                  <h3 class="portfolio-client-name" id="portfolio-client-name">Cliente Seleccionado</h3>
+                  <span class="portfolio-client-rut" id="portfolio-client-rut">RUT: -</span>
+                </div>
+              </div>
+              <div class="portfolio-header-actions">
+                <button class="btn-secondary" id="btn-back-to-inicio" type="button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-right: 6px;">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  Volver a Inicio
+                </button>
+              </div>
+            </div>
+
+            <!-- Portfolio Sub-navigation -->
+            <div class="portfolio-subnav">
+              <button class="portfolio-subnav-item active" data-subtab="resumen" type="button">Resumen</button>
+              <button class="portfolio-subnav-item" data-subtab="carteras" type="button">Carteras</button>
+              <button class="portfolio-subnav-item" data-subtab="caja" type="button">Caja / Flujo</button>
+              <button class="portfolio-subnav-item" data-subtab="agf" type="button">Administradoras (AGF)</button>
+              <button class="portfolio-subnav-item" data-subtab="operaciones" type="button">Operaciones</button>
+              <button class="portfolio-subnav-item" data-subtab="instrumentos" type="button">Instrumentos</button>
+            </div>
+
+            <!-- SUBTAB: RESUMEN DE CARTERA -->
+            <div id="subtab-resumen" class="portfolio-subtab-content active">
+              <!-- KPIs Cards -->
+              <div class="stats-grid" style="margin-bottom: 24px;">
+                <div class="stat-card">
+                  <div class="stat-icon-wrapper purple">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;">
+                      <line x1="12" y1="1" x2="12" y2="23"></line>
+                      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Valor de Cartera</span>
+                    <span class="stat-value" id="portfolio-kpi-value">$45.820.130 CLP</span>
+                  </div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-icon-wrapper blue">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;">
+                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                      <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Rentabilidad Cartera</span>
+                    <span class="stat-value text-success" id="portfolio-kpi-return">+12.4%</span>
+                  </div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-icon-wrapper purple">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;">
+                      <rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect>
+                      <line x1="12" y1="18" x2="12" y2="12"></line>
+                      <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Inversión Inicial</span>
+                    <span class="stat-value" id="portfolio-kpi-initial">$40.738.000 CLP</span>
+                  </div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-icon-wrapper pink">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Rendimiento Neto</span>
+                    <span class="stat-value text-success" id="portfolio-kpi-net">+ $5.082.130 CLP</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Two Column Layout: Assets Table and Distribution -->
+              <div class="portfolio-grid">
+                
+                <!-- Left Column: Assets Table -->
+                <div class="glass-card" style="padding: 20px;">
+                  <h4 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 600; color: var(--text-primary);">Instrumentos en Cartera</h4>
+                  <div class="table-container" style="border: none; margin: 0; padding: 0; box-shadow: none; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                      <thead>
+                        <tr style="border-bottom: 1px solid var(--card-border);">
+                          <th style="padding: 10px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Activo</th>
+                          <th style="padding: 10px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Categoría</th>
+                          <th style="padding: 10px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Monto Invertido</th>
+                          <th style="padding: 10px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Participación</th>
+                          <th style="padding: 10px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; text-align: right;">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style="border-bottom: 1px solid var(--card-border);">
+                          <td style="padding: 12px 10px;">
+                            <div style="display: flex; align-items: center;">
+                              <div class="asset-avatar bg-purple" style="width: 24px; height: 24px; border-radius: 4px; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: white; margin-right: 8px;">FI</div>
+                              <span style="font-weight: 500; color: var(--text-primary);">Renta Fija Local</span>
+                            </div>
+                          </td>
+                          <td style="padding: 12px 10px; color: var(--text-secondary);">Deuda / Bonos</td>
+                          <td style="padding: 12px 10px; color: var(--text-primary); font-weight: 500;">$22.910.065 CLP</td>
+                          <td style="padding: 12px 10px; color: var(--text-secondary);">50.0%</td>
+                          <td style="padding: 12px 10px; text-align: right;">
+                            <button class="btn-table-action btn-portfolio-buy" data-asset="Renta Fija Local" type="button" style="color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(16, 185, 129, 0.05); cursor: pointer; transition: all 0.2s ease;">Comprar</button>
+                            <button class="btn-table-action btn-portfolio-sell" data-asset="Renta Fija Local" type="button" style="color: var(--pink-color); border: 1px solid rgba(236, 72, 153, 0.2); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(236, 72, 153, 0.05); cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">Vender</button>
+                          </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--card-border);">
+                          <td style="padding: 12px 10px;">
+                            <div style="display: flex; align-items: center;">
+                              <div class="asset-avatar bg-pink" style="width: 24px; height: 24px; border-radius: 4px; background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: white; margin-right: 8px;">RV</div>
+                              <span style="font-weight: 500; color: var(--text-primary);">Acciones US (AAPL/MSFT)</span>
+                            </div>
+                          </td>
+                          <td style="padding: 12px 10px; color: var(--text-secondary);">Renta Variable</td>
+                          <td style="padding: 12px 10px; color: var(--text-primary); font-weight: 500;">$13.746.039 CLP</td>
+                          <td style="padding: 12px 10px; color: var(--text-secondary);">30.0%</td>
+                          <td style="padding: 12px 10px; text-align: right;">
+                            <button class="btn-table-action btn-portfolio-buy" data-asset="Acciones US" type="button" style="color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(16, 185, 129, 0.05); cursor: pointer; transition: all 0.2s ease;">Comprar</button>
+                            <button class="btn-table-action btn-portfolio-sell" data-asset="Acciones US" type="button" style="color: var(--pink-color); border: 1px solid rgba(236, 72, 153, 0.2); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(236, 72, 153, 0.05); cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">Vender</button>
+                          </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--card-border);">
+                          <td style="padding: 12px 10px;">
+                            <div style="display: flex; align-items: center;">
+                              <div class="asset-avatar bg-blue" style="width: 24px; height: 24px; border-radius: 4px; background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: white; margin-right: 8px;">RE</div>
+                              <span style="font-weight: 500; color: var(--text-primary);">Fondo de Infraestructura</span>
+                            </div>
+                          </td>
+                          <td style="padding: 12px 10px; color: var(--text-secondary);">Bienes Raíces</td>
+                          <td style="padding: 12px 10px; color: var(--text-primary); font-weight: 500;">$6.873.020 CLP</td>
+                          <td style="padding: 12px 10px; color: var(--text-secondary);">15.0%</td>
+                          <td style="padding: 12px 10px; text-align: right;">
+                            <button class="btn-table-action btn-portfolio-buy" data-asset="Fondo Infraestructura" type="button" style="color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(16, 185, 129, 0.05); cursor: pointer; transition: all 0.2s ease;">Comprar</button>
+                            <button class="btn-table-action btn-portfolio-sell" data-asset="Fondo Infraestructura" type="button" style="color: var(--pink-color); border: 1px solid rgba(236, 72, 153, 0.2); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(236, 72, 153, 0.05); cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">Vender</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 10px;">
+                            <div style="display: flex; align-items: center;">
+                              <div class="asset-avatar bg-orange" style="width: 24px; height: 24px; border-radius: 4px; background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: white; margin-right: 8px;">LI</div>
+                              <span style="font-weight: 500; color: var(--text-primary);">Caja / Efectivo</span>
+                            </div>
+                          </td>
+                          <td style="padding: 12px 10px; color: var(--text-secondary);">Liquidez</td>
+                          <td style="padding: 12px 10px; color: var(--text-primary); font-weight: 500;">$2.291.006 CLP</td>
+                          <td style="padding: 12px 10px; color: var(--text-secondary);">5.0%</td>
+                          <td style="padding: 12px 10px; text-align: right;">
+                            <button class="btn-table-action btn-portfolio-buy" data-asset="Caja / Efectivo" type="button" style="color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(16, 185, 129, 0.05); cursor: pointer; transition: all 0.2s ease;">Comprar</button>
+                            <button class="btn-table-action btn-portfolio-sell" data-asset="Caja / Efectivo" type="button" style="color: var(--pink-color); border: 1px solid rgba(236, 72, 153, 0.2); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(236, 72, 153, 0.05); cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">Vender</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <!-- Right Column: Chart representation and transaction history -->
+                <div class="glass-card" style="padding: 20px; display: flex; flex-direction: column; gap: 20px;">
+                  <div>
+                    <h4 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 600; color: var(--text-primary);">Asignación de Activos</h4>
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                      
+                      <div class="asset-bar-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 4px;">
+                          <span style="font-weight: 500; color: var(--text-primary);">Renta Fija</span>
+                          <span style="color: var(--text-secondary); font-weight: 500;">50%</span>
+                        </div>
+                        <div class="asset-bar-bg" style="height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; border: 1px solid var(--card-border);">
+                          <div class="asset-bar-fill bg-purple" style="height: 100%; width: 50%; background: var(--primary-gradient);"></div>
+                        </div>
+                      </div>
+
+                      <div class="asset-bar-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 4px;">
+                          <span style="font-weight: 500; color: var(--text-primary);">Renta Variable</span>
+                          <span style="color: var(--text-secondary); font-weight: 500;">30%</span>
+                        </div>
+                        <div class="asset-bar-bg" style="height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; border: 1px solid var(--card-border);">
+                          <div class="asset-bar-fill bg-pink" style="height: 100%; width: 30%; background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);"></div>
+                        </div>
+                      </div>
+
+                      <div class="asset-bar-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 4px;">
+                          <span style="font-weight: 500; color: var(--text-primary);">Bienes Raíces</span>
+                          <span style="color: var(--text-secondary); font-weight: 500;">15%</span>
+                        </div>
+                        <div class="asset-bar-bg" style="height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; border: 1px solid var(--card-border);">
+                          <div class="asset-bar-fill bg-blue" style="height: 100%; width: 15%; background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);"></div>
+                        </div>
+                      </div>
+
+                      <div class="asset-bar-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 4px;">
+                          <span style="font-weight: 500; color: var(--text-primary);">Liquidez</span>
+                          <span style="color: var(--text-secondary); font-weight: 500;">5%</span>
+                        </div>
+                        <div class="asset-bar-bg" style="height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; border: 1px solid var(--card-border);">
+                          <div class="asset-bar-fill bg-orange" style="height: 100%; width: 5%; background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);"></div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div style="border-top: 1px solid var(--card-border); padding-top: 16px;">
+                    <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: var(--text-primary);">Últimas Operaciones</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--card-border); padding: 8px; border-radius: var(--radius-sm);">
+                        <div style="display: flex; flex-direction: column;">
+                          <span style="color: var(--text-primary); font-weight: 500;">Compra AAPL</span>
+                          <span style="color: var(--text-muted); font-size: 9.5px; margin-top: 1px;">Hace 2 días • Rebalanceo</span>
+                        </div>
+                        <span style="color: var(--success-color); font-weight: 600;">+ $500.000 CLP</span>
+                      </div>
+                      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--card-border); padding: 8px; border-radius: var(--radius-sm);">
+                        <div style="display: flex; flex-direction: column;">
+                          <span style="color: var(--text-primary); font-weight: 500;">Dividendos Cobrados</span>
+                          <span style="color: var(--text-muted); font-size: 9.5px; margin-top: 1px;">Hace 1 semana • Renta Variable</span>
+                        </div>
+                        <span style="color: var(--success-color); font-weight: 600;">+ $184.200 CLP</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <!-- SUBTAB: CARTERAS -->
+            <div id="subtab-carteras" class="portfolio-subtab-content">
+              <div class="table-actions">
+                <div class="search-box">
+                  <input type="text" id="search-carteras" placeholder="Buscar cartera..." />
+                </div>
+                <div class="action-buttons-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button id="btn-add-cartera" class="btn-submit btn-action-add" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);" type="button">
+                    + Agregar Cartera
+                  </button>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: 600;">Nombre / Cuenta</th>
+                      <th style="font-weight: 600;">Administradora (AGF)</th>
+                      <th style="font-weight: 600;">Estado</th>
+                      <th style="font-weight: 600; text-align: right;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="carteras-table-body">
+                    <tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-muted);">Cargando carteras...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- SUBTAB: CAJA / FLUJO DE EFECTIVO -->
+            <div id="subtab-caja" class="portfolio-subtab-content">
+              <!-- Balances Grid -->
+              <div id="caja-balances-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <!-- Dynamically populated portfolio balance cards -->
+              </div>
+
+              <!-- Actions and Movements -->
+              <div class="table-actions">
+                <div class="action-buttons-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto;">
+                  <button id="btn-caja-movimiento" class="btn-submit" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);" type="button">
+                    Registrar Movimiento
+                  </button>
+                  <button id="btn-caja-traspaso" class="btn-submit" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);" type="button">
+                    Registrar Traspaso
+                  </button>
+                </div>
+              </div>
+
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: 600;">Fecha</th>
+                      <th style="font-weight: 600;">Cartera</th>
+                      <th style="font-weight: 600;">Tipo</th>
+                      <th style="font-weight: 600;">Monto</th>
+                      <th style="font-weight: 600;">Motivo / Comentario</th>
+                    </tr>
+                  </thead>
+                  <tbody id="caja-movements-table-body">
+                    <tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--text-muted);">Cargando movimientos de caja...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- SUBTAB: ADMINISTRADORAS (AGF) -->
+            <div id="subtab-agf" class="portfolio-subtab-content">
+              <div class="table-actions">
+                <div class="search-box">
+                  <input type="text" id="search-agf" placeholder="Buscar AGF..." />
+                </div>
+                <div class="action-buttons-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button id="btn-add-agf" class="btn-submit btn-action-add" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);" type="button">
+                    + Agregar Administradora
+                  </button>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: 600;">Administradoras</th>
+                      <th style="font-weight: 600;">Estado</th>
+                      <th style="font-weight: 600; text-align: right;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="agf-table-body">
+                    <tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--text-muted);">Cargando administradoras...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- SUBTAB: OPERACIONES DE INSTRUMENTOS -->
+            <div id="subtab-operaciones" class="portfolio-subtab-content">
+              <!-- Métricas Grid -->
+              <div class="stats-grid" style="margin-bottom: 24px;">
+                <div class="stat-card">
+                  <div class="stat-icon-wrapper purple">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;">
+                      <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                      <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                    </svg>
+                  </div>
+                  <div class="stat-content">
+                    <span class="stat-label">Valorización de Posiciones</span>
+                    <span class="stat-value" id="kpi-valor-posiciones">$0 CLP</span>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon-wrapper green">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;">
+                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                      <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                  </div>
+                  <div class="stat-content">
+                    <span class="stat-label">Utilidad Realizada</span>
+                    <span class="stat-value" id="kpi-resultado-realizado">$0 CLP</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Acciones -->
+              <div class="table-actions">
+                <div class="search-box">
+                  <input type="text" id="search-operaciones" placeholder="Buscar por ticker/instrumento..." />
+                </div>
+                <div class="action-buttons-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button id="btn-add-operacion" class="btn-submit btn-action-add" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);" type="button">
+                    + Registrar Operación
+                  </button>
+                  <button id="btn-carga-masiva-operaciones" class="btn-secondary" title="Carga Masiva en bloque" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                    <span>Carga Masiva</span>
+                  </button>
+                  <button id="btn-download-plantilla-operaciones" class="btn-secondary" title="Descargar plantilla Excel de operaciones" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Descargar Plantilla</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Posiciones Activas -->
+              <h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary); margin: 24px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></span>
+                Posición Actual de Instrumentos
+              </h4>
+              <div class="table-container" style="margin-bottom: 32px;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: 600;">Instrumento</th>
+                      <th style="font-weight: 600;">Cantidad</th>
+                      <th style="font-weight: 600; text-align: right;">Costo Promedio</th>
+                      <th style="font-weight: 600; text-align: right;">Monto Total</th>
+                      <th style="font-weight: 600; text-align: right;">Moneda</th>
+                      <th style="font-weight: 600; text-align: center; width: 100px;">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody id="posiciones-table-body">
+                    <tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Selecciona un cliente y cartera para ver sus posiciones.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Resultado Realizado -->
+              <h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary); margin: 24px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></span>
+                Resultado Realizado (Consumos)
+              </h4>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: 600;">Instrumento</th>
+                      <th style="font-weight: 600;">Cantidad Vendida</th>
+                      <th style="font-weight: 600; text-align: right;">Precio Venta Prom.</th>
+                      <th style="font-weight: 600; text-align: right;">Costo Promedio</th>
+                      <th style="font-weight: 600; text-align: right;">Resultado Realizado</th>
+                      <th style="font-weight: 600; text-align: right;">Moneda</th>
+                    </tr>
+                  </thead>
+                  <tbody id="resultado-table-body">
+                    <tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Selecciona un cliente y cartera para ver su resultado realizado.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Historial de Transacciones (para Reversa) -->
+              <h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary); margin: 24px 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--warning);"></span>
+                Historial de Transacciones / Reversas
+              </h4>
+              <div class="table-container" style="margin-bottom: 24px;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: 600;">Fecha</th>
+                      <th style="font-weight: 600;">Cartera</th>
+                      <th style="font-weight: 600;">Operación</th>
+                      <th style="font-weight: 600; text-align: right;">Monto</th>
+                      <th style="font-weight: 600;">Comentario</th>
+                      <th style="font-weight: 600; text-align: center;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="historial-operaciones-table-body">
+                    <tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Selecciona un cliente y cartera para ver el historial de transacciones.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- SUBTAB: INSTRUMENTOS -->
+            <div id="subtab-instrumentos" class="portfolio-subtab-content">
+
+
+              <!-- Acciones -->
+              <div class="table-actions">
+                <div class="search-box">
+                  <input type="text" id="search-instrumentos" placeholder="Buscar por ticker o nombre..." />
+                </div>
+                <div class="action-buttons-group">
+                  <button id="btn-add-instrumento" class="btn-submit btn-action-add" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);" type="button">
+                    + Registrar Instrumento
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tabla de Instrumentos -->
+              <div class="table-container" style="margin-bottom: 24px;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="font-weight: 600;">Ticker</th>
+                      <th style="font-weight: 600;">Nombre del Instrumento</th>
+                      <th style="font-weight: 600;">Tipo</th>
+                      <th style="font-weight: 600;">Moneda</th>
+                      <th style="font-weight: 600; text-align: center;">Presencia Bursátil</th>
+                      <th style="font-weight: 600; text-align: right;">% Accionario Anual</th>
+                      <th style="font-weight: 600; text-align: center;">Estado</th>
+                      <th style="font-weight: 600; text-align: center;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="instrumentos-table-body">
+                    <tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--text-muted);">Cargando instrumentos...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: CLIENTES -->
+          <div id="tab-clientes" class="tab-pane">
+            <div class="table-actions">
+              <div class="search-box">
+                <input type="text" id="search-clientes" placeholder="Buscar cliente..." />
+              </div>
+              <div class="action-buttons-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <!-- Templates Dropdown / Buttons -->
+                <button id="btn-download-excel" class="btn-secondary" title="Descargar plantilla Excel">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span>Plantilla Excel</span>
+                </button>
+                <button id="btn-download-csv" class="btn-secondary" title="Descargar plantilla CSV">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span>Plantilla CSV</span>
+                </button>
+                <button id="btn-bulk-upload-trigger" class="btn-secondary" title="Carga Masiva de Clientes">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <span>Carga Masiva</span>
+                </button>
+                <input type="file" id="bulk-upload-input" accept=".csv, .xlsx, .xls" style="display: none;" />
+                <button id="btn-add-cliente" class="btn-submit btn-action-add" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);">
+                  + Agregar Cliente
+                </button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>RUT</th>
+                    <th>Nombre Cliente</th>
+                    <th>Tax ID</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="clientes-table-body">
+                  <!-- Dynamic Client Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 3: COLABORADORES -->
+          <div id="tab-colaboradores" class="tab-pane">
+            <div class="table-actions">
+              <div class="search-box">
+                <input type="text" id="search-colaboradores" placeholder="Buscar colaborador..." />
+              </div>
+              <div class="action-buttons-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button id="btn-download-colab-excel" class="btn-secondary" title="Descargar plantilla Excel Colaboradores">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span>Plantilla Excel</span>
+                </button>
+                <button id="btn-download-colab-csv" class="btn-secondary" title="Descargar plantilla CSV Colaboradores">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span>Plantilla CSV</span>
+                </button>
+                <button id="btn-colab-bulk-upload-trigger" class="btn-secondary" title="Carga Masiva de Colaboradores">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <span>Carga Masiva</span>
+                </button>
+                <input type="file" id="colab-bulk-upload-input" accept=".csv, .xlsx, .xls" style="display: none;" />
+                <button id="btn-add-colaborador" class="btn-submit btn-action-add" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);">
+                  + Agregar Colaborador
+                </button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Correo Electrónico</th>
+                    <th>Teléfono</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="colaboradores-table-body">
+                  <!-- Dynamic Colaboradores Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 4: ROLES -->
+          <div id="tab-roles" class="tab-pane">
+            <div class="table-actions">
+              <div class="search-box">
+                <input type="text" id="search-roles" placeholder="Buscar rol..." />
+              </div>
+              <button id="btn-add-rol" class="btn-submit btn-action-add" style="width: auto; padding: 10px 20px; font-size: 14px; border-radius: var(--radius-sm);">
+                + Crear Rol
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nombre de Rol</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="roles-table-body">
+                  <!-- Dynamic Roles Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </section>
+
+    <!-- Modals for adding clients/colaboradores -->
+    <div id="modal-container" class="modal-overlay hidden">
+      <!-- CLIENT MODAL -->
+      <div id="modal-cliente" class="modal-card hidden">
+        <div class="modal-header">
+          <h3 id="modal-cliente-title">Agregar Nuevo Cliente</h3>
+          <button class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-cliente">
+          <input type="hidden" id="edit-cliente-idx" value="" />
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="cliente-rut" name="rut" required placeholder=" " />
+              <label for="cliente-rut" style="left: 14px;">RUT (e.g. 12.345.678-9)</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="cliente-nombre" name="nombreCliente" required placeholder=" " />
+              <label for="cliente-nombre" style="left: 14px;">Nombre del Cliente</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="cliente-taxid" name="taxId" placeholder=" " />
+              <label for="cliente-taxid" style="left: 14px;">Tax ID (Opcional)</label>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Guardar Cliente</button>
+        </form>
+      </div>
+
+      <!-- COLABORADOR MODAL -->
+      <div id="modal-colaborador" class="modal-card hidden">
+        <div class="modal-header">
+          <h3 id="modal-colaborador-title">Agregar Nuevo Colaborador</h3>
+          <button class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-colaborador">
+          <input type="hidden" id="edit-colab-idx" value="" />
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="colab-nombres" name="nombres" required placeholder=" " />
+              <label for="colab-nombres" style="left: 14px;">Nombres</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="colab-paterno" name="apellidoPaterno" required placeholder=" " />
+              <label for="colab-paterno" style="left: 14px;">Apellido Paterno</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="colab-materno" name="apellidoMaterno" placeholder=" " />
+              <label for="colab-materno" style="left: 14px;">Apellido Materno (Opcional)</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="email" id="colab-correo" name="correoElectronico" required placeholder=" " />
+              <label for="colab-correo" style="left: 14px;">Correo Electrónico</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="tel" id="colab-telefono" name="telefonoMovil" placeholder=" " />
+              <label for="colab-telefono" style="left: 14px;">Teléfono Móvil (Opcional)</label>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Guardar Colaborador</button>
+        </form>
+      </div>
+
+      <!-- CAMBIAR CONTRASENA MODAL -->
+      <div id="modal-cambiar-contrasena" class="modal-card hidden">
+        <div class="modal-header">
+          <h3 id="modal-cambiar-contrasena-title">Cambiar Contraseña</h3>
+          <button class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-change-password">
+          <input type="hidden" id="colab-pass-id" value="" />
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="password" id="colab-new-password" name="nuevaContrasenaPlano" required placeholder=" " />
+              <label for="colab-new-password" style="left: 14px;">Nueva Contraseña (mín. 8 caracteres)</label>
+              <button type="button" id="toggle-colab-password" class="btn-toggle-password" aria-label="Mostrar contraseña">
+                <svg class="icon-eye-colab" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg class="icon-eye-off-colab hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              </button>
+            </div>
+            <span class="error-message" id="error-colab-new-password">La contraseña debe tener mínimo 8 caracteres.</span>
+          </div>
+          <button type="submit" class="btn-submit">Actualizar Contraseña</button>
+        </form>
+      </div>
+
+      <!-- ROL MODAL -->
+      <div id="modal-rol" class="modal-card hidden">
+        <div class="modal-header">
+          <h3 id="modal-rol-title">Crear Nuevo Rol</h3>
+          <button class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-rol">
+          <input type="hidden" id="edit-rol-idx" value="" />
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="rol-nombre" name="nombre" required placeholder=" " />
+              <label for="rol-nombre" style="left: 14px;">Nombre de Rol</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="rol-descripcion" name="descripcion" required placeholder=" " />
+              <label for="rol-descripcion" style="left: 14px;">Descripción</label>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Guardar Rol</button>
+        </form>
+      </div>
+
+      <!-- ASIGNAR PERMISOS MODAL -->
+      <div id="modal-permisos-rol" class="modal-card hidden" style="max-width: 500px;">
+        <div class="modal-header">
+          <h3 id="modal-permisos-rol-title">Asignar Permisos a Rol</h3>
+          <button class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-assign-permissions">
+          <input type="hidden" id="permisos-rol-id" value="" />
+          <div class="input-group" style="margin-bottom: 16px;">
+            <label class="custom-checkbox" style="font-weight: 600; color: var(--text-primary);">
+              <input type="checkbox" id="check-all-permissions" />
+              <span class="checkmark"></span>
+              <span class="label-text">Seleccionar Todos</span>
+            </label>
+          </div>
+          <div id="permissions-checklist-container" style="max-height: 250px; overflow-y: auto; padding-right: 8px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--card-border); padding: 12px; border-radius: var(--radius-sm); background: rgba(0, 0, 0, 0.15);">
+            <!-- Dynamic Permisos Checklist -->
+          </div>
+          <button type="submit" class="btn-submit">Guardar Permisos</button>
+        </form>
+      </div>
+
+      <!-- ASIGNAR ROL A COLABORADOR MODAL -->
+      <div id="modal-rol-colaborador" class="modal-card hidden">
+        <div class="modal-header">
+          <h3 id="modal-rol-colaborador-title">Asignar Rol a Colaborador</h3>
+          <button class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-assign-user-role">
+          <input type="hidden" id="assign-colab-id" value="" />
+          <div class="info-box" style="margin-bottom: 20px;">
+            <span class="info-label">Colaborador</span>
+            <span class="info-value" id="assign-colab-name">-</span>
+          </div>
+          <div class="input-group">
+            <label class="info-label" style="margin-bottom: 8px; display: block;">Roles Disponibles</label>
+            <div id="colab-roles-checklist-container" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--card-border); padding: 12px; border-radius: var(--radius-sm); background: rgba(0, 0, 0, 0.15);">
+              <!-- Dynamic Roles Checklist -->
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Guardar Asignación</button>
+        </form>
+      </div>
+
+      <!-- PORTFOLIO MODAL -->
+      <div id="modal-portfolio" class="modal-card hidden" style="max-width: 580px;">
+        <div class="modal-header">
+          <h3 class="modal-title">Portafolio de Inversiones</h3>
+          <button class="btn-close-modal" id="btn-close-portfolio">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 20px 0 0 0;">
+          <div class="portfolio-dashboard">
+            
+            <!-- Balance Summary -->
+            <div class="portfolio-summary-card" style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
+              <span class="portfolio-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); display: block; margin-bottom: 4px;">Valor Total del Portafolio</span>
+              <span class="portfolio-value" style="font-size: 26px; font-weight: 700; color: var(--text-primary); display: block;">$45.820.130 CLP</span>
+              <div class="portfolio-trend positive" style="display: flex; align-items: center; font-size: 11.5px; color: var(--success-color); margin-top: 6px; font-weight: 500;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 13px; height: 13px; margin-right: 4px;">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                  <polyline points="17 6 23 6 23 12"></polyline>
+                </svg>
+                <span>+12.4% este mes (+ $5.082.130 CLP)</span>
+              </div>
+            </div>
+
+            <!-- Assets distribution grid -->
+            <h4 style="margin: 0 0 12px 0; font-size: 12.5px; font-weight: 600; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px;">Asignación de Activos</h4>
+            <div class="portfolio-assets-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+              
+              <div class="asset-item" style="display: flex; align-items: center; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 10px; border-radius: var(--radius-sm);">
+                <div class="asset-icon bg-purple" style="width: 32px; height: 32px; border-radius: 6px; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; margin-right: 10px;">FI</div>
+                <div class="asset-details" style="display: flex; flex-direction: column; min-width: 0;">
+                  <span class="asset-name" style="font-size: 11px; color: var(--text-primary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Renta Fija</span>
+                  <span class="asset-value" style="font-size: 9.5px; color: var(--text-muted); margin-top: 1px;">$22.910.065 CLP (50%)</span>
+                </div>
+              </div>
+
+              <div class="asset-item" style="display: flex; align-items: center; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 10px; border-radius: var(--radius-sm);">
+                <div class="asset-icon bg-pink" style="width: 32px; height: 32px; border-radius: 6px; background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; margin-right: 10px;">RV</div>
+                <div class="asset-details" style="display: flex; flex-direction: column; min-width: 0;">
+                  <span class="asset-name" style="font-size: 11px; color: var(--text-primary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Acciones / Renta Var.</span>
+                  <span class="asset-value" style="font-size: 9.5px; color: var(--text-muted); margin-top: 1px;">$13.746.039 CLP (30%)</span>
+                </div>
+              </div>
+
+              <div class="asset-item" style="display: flex; align-items: center; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 10px; border-radius: var(--radius-sm);">
+                <div class="asset-icon bg-blue" style="width: 32px; height: 32px; border-radius: 6px; background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; margin-right: 10px;">RE</div>
+                <div class="asset-details" style="display: flex; flex-direction: column; min-width: 0;">
+                  <span class="asset-name" style="font-size: 11px; color: var(--text-primary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Bienes Raíces</span>
+                  <span class="asset-value" style="font-size: 9.5px; color: var(--text-muted); margin-top: 1px;">$6.873.020 CLP (15%)</span>
+                </div>
+              </div>
+
+              <div class="asset-item" style="display: flex; align-items: center; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); padding: 10px; border-radius: var(--radius-sm);">
+                <div class="asset-icon bg-orange" style="width: 32px; height: 32px; border-radius: 6px; background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; margin-right: 10px;">LI</div>
+                <div class="asset-details" style="display: flex; flex-direction: column; min-width: 0;">
+                  <span class="asset-name" style="font-size: 11px; color: var(--text-primary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Liquidez / Caja</span>
+                  <span class="asset-value" style="font-size: 9.5px; color: var(--text-muted); margin-top: 1px;">$2.291.006 CLP (5%)</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--card-border); padding-top: 15px;">
+              <button class="btn-secondary" id="btn-portfolio-report" type="button" style="padding: 8px 16px;">Generar Informe</button>
+              <button class="btn-primary" id="btn-portfolio-rebalance" type="button" style="padding: 8px 16px;">Rebalancear</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- CARTERA MODAL -->
+      <div id="modal-cartera" class="modal-card hidden">
+        <div class="modal-header">
+          <h3 id="modal-cartera-title">Agregar Nueva Cartera</h3>
+          <button type="button" class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-cartera">
+          <input type="hidden" id="edit-cartera-idx" value="" />
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="cartera-nombre" name="nombreCartera" required placeholder=" " />
+              <label for="cartera-nombre" style="left: 14px;">Nombre / Cuenta de la Cartera</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+              <select id="cartera-agf" name="idAdmGralFondos" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                <option value="" disabled selected style="background: var(--bg-card); color: var(--text-muted);">Selecciona Administradora (AGF)</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Guardar Cartera</button>
+        </form>
+      </div>
+
+      <!-- MOVIMIENTO CAJA MODAL -->
+      <div id="modal-movimiento-caja" class="modal-card hidden">
+        <div class="modal-header">
+          <h3>Registrar Movimiento de Caja</h3>
+          <button type="button" class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-movimiento" style="padding: 10px 0 0 0;">
+          <div class="input-group">
+            <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+              <select id="movimiento-cartera" name="idCartera" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                <option value="" disabled selected style="background: var(--bg-card); color: var(--text-muted);">Selecciona Cartera</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Tipo de Movimiento *</label>
+              <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+                <select id="movimiento-tipo" name="tipoMovimientoCaja" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                  <option value="" disabled selected style="background: var(--bg-card); color: var(--text-muted);">Selecciona Tipo</option>
+                  <option value="APORTE" style="background: var(--bg-card); color: var(--text-primary);">Aporte / Depósito</option>
+                  <option value="RETIRO" style="background: var(--bg-card); color: var(--text-primary);">Retiro</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-group">
+              <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Moneda *</label>
+              <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+                <select id="movimiento-moneda" name="moneda" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                  <option value="CLP" selected style="background: var(--bg-card); color: var(--text-primary);">CLP</option>
+                  <option value="USD" style="background: var(--bg-card); color: var(--text-primary);">USD</option>
+                  <option value="CLF" style="background: var(--bg-card); color: var(--text-primary);">CLF (UF)</option>
+                  <option value="EUR" style="background: var(--bg-card); color: var(--text-primary);">EUR</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="number" id="movimiento-monto" name="monto" required min="0.0001" step="any" placeholder=" " />
+                <label for="movimiento-monto" style="left: 14px;">Monto *</label>
+              </div>
+            </div>
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="number" id="movimiento-tipocambio" name="tipoCambio" required min="0.0001" step="any" value="1" placeholder=" " />
+                <label for="movimiento-tipocambio" style="left: 14px;">Tipo de Cambio *</label>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Moneda Par *</label>
+              <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+                <select id="movimiento-monedapar" name="monedaTipoCambioPar" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                  <option value="CLP" selected style="background: var(--bg-card); color: var(--text-primary);">CLP</option>
+                  <option value="USD" style="background: var(--bg-card); color: var(--text-primary);">USD</option>
+                  <option value="CLF" style="background: var(--bg-card); color: var(--text-primary);">CLF (UF)</option>
+                  <option value="EUR" style="background: var(--bg-card); color: var(--text-primary);">EUR</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="datetime-local" id="movimiento-fecha" name="fechaMovimiento" required style="padding: 10px 12px; width: 100%; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;" placeholder=" " />
+                <label for="movimiento-fecha" style="left: 14px; top: -10px; font-size: 11px; background: var(--bg-card); padding: 0 4px; color: var(--text-muted);">Fecha Movimiento *</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-top: 15px;">
+            <div class="input-wrapper">
+              <input type="text" id="movimiento-motivo" name="descripcion" required placeholder=" " />
+              <label for="movimiento-motivo" style="left: 14px;">Motivo / Comentario *</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" style="margin-top: 20px;">Registrar Movimiento</button>
+        </form>
+      </div>
+
+      <!-- TRASPASO CAJA MODAL -->
+      <div id="modal-traspaso-caja" class="modal-card hidden">
+        <div class="modal-header">
+          <h3>Registrar Traspaso de Fondos</h3>
+          <button type="button" class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-traspaso">
+          <div class="input-group">
+            <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Cartera de Origen</label>
+            <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+              <select id="traspaso-origen" name="idCarteraOrigen" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                <option value="" disabled selected style="background: var(--bg-card); color: var(--text-muted);">Selecciona Cartera Origen</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-group">
+            <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Cartera de Destino</label>
+            <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+              <select id="traspaso-destino" name="idCarteraDestino" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                <option value="" disabled selected style="background: var(--bg-card); color: var(--text-muted);">Selecciona Cartera Destino</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <div class="input-wrapper">
+              <input type="number" id="traspaso-monto" name="monto" required min="1" placeholder=" " />
+              <label for="traspaso-monto" style="left: 14px;">Monto (CLP)</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="traspaso-motivo" name="motivo" required placeholder=" " />
+              <label for="traspaso-motivo" style="left: 14px;">Motivo / Comentario</label>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Ejecutar Traspaso</button>
+        </form>
+      </div>
+
+      <!-- AGF MODAL -->
+      <div id="modal-agf" class="modal-card hidden">
+        <div class="modal-header">
+          <h3 id="modal-agf-title">Agregar Administradora</h3>
+          <button type="button" class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-agf">
+          <input type="hidden" id="edit-agf-idx" value="" />
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="agf-nombre" name="nombre" required placeholder=" " />
+              <label for="agf-nombre" style="left: 14px;">Administradora</label>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Guardar</button>
+        </form>
+      </div>
+
+      <!-- REGISTRAR OPERACION INSTRUMENTO MODAL -->
+      <div id="modal-operacion-instrumento" class="modal-card hidden" style="max-width: 600px;">
+        <div class="modal-header">
+          <h3>Registrar Operación de Instrumento</h3>
+          <button type="button" class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-operacion-instrumento" style="max-height: 70vh; overflow-y: auto; padding-right: 8px;">
+          <div class="input-group" style="margin-bottom: 15px;">
+            <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Cartera *</label>
+            <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+              <select id="operacion-cartera-select" name="idCartera" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                <option value="" disabled selected style="background: var(--bg-card); color: var(--text-muted);">Selecciona Cartera</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-group">
+            <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Instrumento</label>
+            <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg); display: flex; gap: 8px; align-items: center; padding: 4px 8px;">
+              <select id="operacion-instrumento-select" style="flex: 1; padding: 8px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                <option value="" selected style="background: var(--bg-card); color: var(--text-muted);">-- Escribir UUID manualmente --</option>
+              </select>
+            </div>
+            <div id="operacion-uuid-container" style="display: none; margin-top: 8px;">
+              <div class="input-wrapper">
+                <input type="text" id="operacion-idInstrumento" name="idInstrumento" required placeholder=" " />
+                <label for="operacion-idInstrumento" style="left: 14px;">UUID del Instrumento *</label>
+              </div>
+              <small style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">
+                Ingresa el identificador único UUID del instrumento.
+              </small>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Tipo de Operación *</label>
+              <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+                <select id="operacion-tipo" name="tipoOperacionInstrumento" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                  <option value="COMPRA" style="background: var(--bg-card); color: var(--text-primary);">COMPRA</option>
+                  <option value="VENTA" style="background: var(--bg-card); color: var(--text-primary);">VENTA</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-group">
+              <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Moneda *</label>
+              <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+                <select id="operacion-moneda" name="monedaOperacion" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                  <option value="CLP" selected style="background: var(--bg-card); color: var(--text-primary);">CLP</option>
+                  <option value="USD" style="background: var(--bg-card); color: var(--text-primary);">USD</option>
+                  <option value="CLF" style="background: var(--bg-card); color: var(--text-primary);">CLF (UF)</option>
+                  <option value="EUR" style="background: var(--bg-card); color: var(--text-primary);">EUR</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Fecha Operación *</label>
+              <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+                <input type="datetime-local" id="operacion-fecha" name="fechaOperacion" required style="width: 100%; padding: 10px 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;" />
+              </div>
+            </div>
+            <div class="input-group">
+              <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Fecha Liquidación (Opcional)</label>
+              <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+                <input type="datetime-local" id="operacion-fecha-liquidacion" name="fechaLiquidacion" style="width: 100%; padding: 10px 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;" />
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="number" step="any" id="operacion-cantidad" name="cantidad" required placeholder=" " />
+                <label for="operacion-cantidad" style="left: 14px;">Cantidad *</label>
+              </div>
+            </div>
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="number" step="any" id="operacion-precio" name="precioUnitario" required placeholder=" " />
+                <label for="operacion-precio" style="left: 14px;">Precio Unitario *</label>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="number" step="any" id="operacion-monto-bruto" name="montoBruto" placeholder=" " />
+                <label for="operacion-monto-bruto" style="left: 14px;">Monto Bruto (Calculado)</label>
+              </div>
+            </div>
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="number" step="any" id="operacion-comision" name="comision" required value="0" placeholder=" " />
+                <label for="operacion-comision" style="left: 14px;">Comisión *</label>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="number" step="any" id="operacion-cargos" name="otrosCargos" required value="0" placeholder=" " />
+                <label for="operacion-cargos" style="left: 14px;">Otros Cargos *</label>
+              </div>
+            </div>
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="number" step="any" id="operacion-impuesto" name="impuestoRetenido" required value="0" placeholder=" " />
+                <label for="operacion-impuesto" style="left: 14px;">Impuesto Retenido *</label>
+              </div>
+            </div>
+          </div>
+
+          <div id="section-venta-detalles" style="display: none; border: 1px dashed var(--card-border); border-radius: var(--radius-sm); padding: 12px; margin-top: 15px; background: rgba(0,0,0,0.1);">
+            <h5 style="margin: 0 0 10px 0; font-size: 12px; color: var(--text-primary); font-weight: 600;">Detalles para Venta (Requerido para el cálculo de Utilidad)</h5>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div class="input-group" style="margin: 0;">
+                <div class="input-wrapper">
+                  <input type="number" step="any" id="operacion-precio-ref" name="precioReferencia" value="0" placeholder=" " />
+                  <label for="operacion-precio-ref" style="left: 14px;">Precio Referencia</label>
+                </div>
+              </div>
+              <div class="input-group" style="margin: 0;">
+                <div class="input-wrapper">
+                  <input type="number" step="any" id="operacion-precio-ejec" name="precioEjecutado" value="0" placeholder=" " />
+                  <label for="operacion-precio-ejec" style="left: 14px;">Precio Ejecutado</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="section-tipo-cambio" style="display: none; border: 1px dashed var(--card-border); border-radius: var(--radius-sm); padding: 12px; margin-top: 15px; background: rgba(0,0,0,0.1);">
+            <h5 style="margin: 0 0 10px 0; font-size: 12px; color: var(--text-primary); font-weight: 600;">Tipo de Cambio (Moneda Extranjera)</h5>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div class="input-group" style="margin: 0;">
+                <div class="input-wrapper">
+                  <input type="number" step="any" id="operacion-tc" name="tipoCambioOperacion" value="1" placeholder=" " />
+                  <label for="operacion-tc" style="left: 14px;">Tipo de Cambio</label>
+                </div>
+              </div>
+              <div class="input-group" style="margin: 0;">
+                <div class="input-wrapper">
+                  <input type="text" id="operacion-moneda-par" name="monedaParTipoCambio" value="CLP" placeholder=" " />
+                  <label for="operacion-moneda-par" style="left: 14px;">Moneda Par</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="text" id="operacion-norma" name="normaTributariaRef" placeholder=" " />
+                <label for="operacion-norma" style="left: 14px;">Norma Tributaria Ref.</label>
+              </div>
+            </div>
+            <div class="input-group">
+              <div class="input-wrapper">
+                <input type="text" id="operacion-resultado-vs-ref" name="resultadoVsReferencia" placeholder=" " />
+                <label for="operacion-resultado-vs-ref" style="left: 14px;">Resultado vs Referencia</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-top: 15px;">
+            <div class="input-wrapper">
+              <input type="text" id="operacion-observacion" name="observacion" placeholder=" " />
+              <label for="operacion-observacion" style="left: 14px;">Observación</label>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-top: 15px; display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="operacion-registrar-caja" name="registrarMovimientoCaja" checked style="width: auto; height: auto;" />
+            <label for="operacion-registrar-caja" style="font-size: 13px; color: var(--text-primary); cursor: pointer; user-select: none;">
+              Registrar movimiento de caja automático (Afecta saldo)
+            </label>
+          </div>
+
+          <button type="submit" class="btn-submit" style="margin-top: 20px;">Registrar Operación</button>
+        </form>
+      </div>
+
+      <!-- CARGA MASIVA DE OPERACIONES MODAL -->
+      <div id="modal-carga-masiva-operaciones" class="modal-card hidden" style="max-width: 550px;">
+        <div class="modal-header">
+          <h3>Carga Masiva de Operaciones (Excel)</h3>
+          <button type="button" class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-carga-masiva-operaciones" style="padding: 10px 0 0 0;">
+          <div style="border: 2px dashed var(--card-border); border-radius: var(--radius-sm); padding: 30px 20px; text-align: center; background: rgba(0,0,0,0.1); cursor: pointer;" id="drag-drop-area-operaciones">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 40px; height: 40px; margin: 0 auto 12px auto; color: var(--primary);">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            <p style="margin: 0; font-size: 14px; font-weight: 500; color: var(--text-primary);">Arrastra tu archivo Excel aquí o haz clic para seleccionar</p>
+            <p style="margin: 6px 0 0 0; font-size: 11px; color: var(--text-muted);">Soporta formatos .xlsx</p>
+            <input type="file" id="operaciones-excel-file-input" accept=".xlsx" style="display: none;" />
+          </div>
+          
+          <div id="selected-file-container-operaciones" style="display: none; align-items: center; justify-content: space-between; margin-top: 15px; padding: 10px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: var(--radius-sm);">
+            <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; color: var(--success); flex-shrink: 0;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              <span id="selected-file-name-operaciones" style="font-size: 12px; color: var(--text-primary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">nombre_del_archivo.xlsx</span>
+            </div>
+            <button type="button" id="btn-clear-file-operaciones" style="background: none; border: none; color: var(--text-danger); font-size: 16px; cursor: pointer; padding: 0 4px;">&times;</button>
+          </div>
+
+          <button type="submit" class="btn-submit" style="margin-top: 20px;" id="btn-submit-upload-operaciones" disabled>Cargar Planilla</button>
+          
+          <!-- Upload Status / Errors list -->
+          <div id="upload-status-result-operaciones" style="margin-top: 20px; display: none;">
+            <div id="upload-summary-alert" style="padding: 12px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; margin-bottom: 15px;"></div>
+            <div id="upload-errors-table-container" style="max-height: 200px; overflow-y: auto; border: 1px solid var(--card-border); border-radius: var(--radius-sm); display: none;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                <thead style="background: var(--bg-card); position: sticky; top: 0;">
+                  <tr style="border-bottom: 1px solid var(--card-border);">
+                    <th style="padding: 8px;">Fila</th>
+                    <th style="padding: 8px;">Operación</th>
+                    <th style="padding: 8px;">Error</th>
+                  </tr>
+                </thead>
+                <tbody id="upload-errors-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- INSTRUMENTO MODAL -->
+      <div id="modal-instrumento" class="modal-card hidden" style="max-width: 500px;">
+        <div class="modal-header">
+          <h3 id="modal-instrumento-title">Agregar Instrumento</h3>
+          <button type="button" class="btn-close-modal">&times;</button>
+        </div>
+        <form id="form-add-instrumento" style="padding: 10px 0 0 0;">
+          <input type="hidden" id="edit-instrumento-idx" value="" />
+          
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="instrumento-ticker" name="ticker" required placeholder=" " />
+              <label for="instrumento-ticker" style="left: 14px;">Ticker / Símbolo *</label>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="text" id="instrumento-nombre" name="nombreInstrumento" required placeholder=" " />
+              <label for="instrumento-nombre" style="left: 14px;">Nombre del Instrumento *</label>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-bottom: 15px;">
+            <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Tipo de Instrumento *</label>
+            <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+              <select id="instrumento-tipo-select" name="tipoInstrumento" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                <option value="" disabled selected style="background: var(--bg-card); color: var(--text-muted);">Selecciona Tipo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-bottom: 15px;">
+            <label style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">Moneda *</label>
+            <div class="input-wrapper" style="border: 1px solid var(--card-border); border-radius: var(--radius-sm); background: var(--input-bg);">
+              <select id="instrumento-moneda-select" name="moneda" required style="width: 100%; padding: 12px; background: transparent; border: none; color: var(--text-primary); font-size: 13px; outline: none;">
+                <option value="CLP" style="background: var(--bg-card); color: var(--text-primary);">CLP</option>
+                <option value="USD" style="background: var(--bg-card); color: var(--text-primary);">USD</option>
+                <option value="CLF" style="background: var(--bg-card); color: var(--text-primary);">CLF (UF)</option>
+                <option value="EUR" style="background: var(--bg-card); color: var(--text-primary);">EUR</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-bottom: 15px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="instrumento-presencia" name="tienePresenciaBursatil" checked style="width: 16px; height: 16px; accent-color: var(--primary);" />
+              <label for="instrumento-presencia" style="font-size: 13px; font-weight: 500; color: var(--text-primary); cursor: pointer; user-select: none;">Tiene Presencia Bursátil</label>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input type="number" id="instrumento-porcentaje" name="porcentajeAccionarioAnual" required step="any" min="0" value="0" placeholder=" " />
+              <label for="instrumento-porcentaje" style="left: 14px;">Porcentaje Accionario Anual *</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" style="margin-top: 20px;" id="btn-submit-instrumento">Guardar Instrumento</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main JavaScript Logic -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

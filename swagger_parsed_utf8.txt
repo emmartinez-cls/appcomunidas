@@ -1,0 +1,254 @@
+--- PATHS ---
+/api/AdmGralFondos/agregar
+   POST
+     RequestBody Schema: {
+  "$ref": "#/components/schemas/AgregarAdmGralFondosRequest"
+}
+     Responses:
+       200: OK
+/api/AdmGralFondos
+   GET
+     Parameters: ["soloActivas (query)"]
+     Responses:
+       200: OK
+/api/AdmGralFondos/{idAdmGralFondos}
+   GET
+     Parameters: ["idAdmGralFondos (path)"]
+     Responses:
+       200: OK
+/api/AdmGralFondos/actualizar
+   PUT
+     RequestBody Schema: {
+  "$ref": "#/components/schemas/ActualizarAdmGralFondosRequest"
+}
+     Responses:
+       200: OK
+/api/AdmGralFondos/desactivar/{idAdmGralFondos}
+   PUT
+     Parameters: ["idAdmGralFondos (path)"]
+     Responses:
+       200: OK
+/api/AdmGralFondos/reactivar/{idAdmGralFondos}
+   PUT
+     Parameters: ["idAdmGralFondos (path)"]
+     Responses:
+       200: OK
+/api/Caja/saldo/{idCartera}
+   GET
+     Parameters: ["idCartera (path)"]
+     Responses:
+       200: OK
+/api/Caja/saldos
+   GET
+     Parameters: ["idCliente (query)"]
+     Responses:
+       200: OK
+/api/Caja/movimiento
+   POST
+     RequestBody Schema: {
+  "$ref": "#/components/schemas/RegistrarMovimientoCajaRequest"
+}
+     Responses:
+       200: OK
+/api/Caja/traspaso
+   POST
+     RequestBody Schema: {
+  "$ref": "#/components/schemas/TraspasoCarteraRequest"
+}
+     Responses:
+       200: OK
+/api/Caja/movimientos
+   GET
+     Parameters: ["idCartera (query)","tipo (query)","fechaDesde (query)","fechaHasta (query)","top (query)"]
+     Responses:
+       200: OK
+/api/Caja/tipos-movimiento
+   GET
+     Responses:
+       200: OK
+/api/Carteras/agregar
+   POST
+     RequestBody Schema: {
+  "$ref": "#/components/schemas/AgregarCarteraRequest"
+}
+     Responses:
+       200: OK
+/api/Carteras
+   GET
+     Parameters: ["idCliente (query)","idAdmGralFondos (query)","soloActivas (query)"]
+     Responses:
+       200: OK
+/api/Carteras/{idCartera}
+   GET
+     Parameters: ["idCartera (path)"]
+     Responses:
+       200: OK
+/api/Carteras/actualizar
+   PUT
+     RequestBody Schema: {
+  "$ref": "#/components/schemas/ActualizarCarteraRequest"
+}
+     Responses:
+       200: OK
+/api/Carteras/desactivar/{idCartera}
+   PUT
+     Parameters: ["idCartera (path)"]
+     Responses:
+       200: OK
+/api/Carteras/reactivar/{idCartera}
+   PUT
+     Parameters: ["idCartera (path)"]
+     Responses:
+       200: OK
+
+--- SCHEMAS DETAILS ---
+Schema [ActualizarAdmGralFondosRequest]:
+{
+  "type": "object",
+  "properties": {
+    "idAdmGralFondos": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "nombreAdmGralFondos": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
+Schema [ActualizarCarteraRequest]:
+{
+  "type": "object",
+  "properties": {
+    "idCartera": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idAdmGralFondos": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idCliente": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "cuentaCartera": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
+Schema [AgregarAdmGralFondosRequest]:
+{
+  "type": "object",
+  "properties": {
+    "nombreAdmGralFondos": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
+Schema [AgregarCarteraRequest]:
+{
+  "type": "object",
+  "properties": {
+    "idAdmGralFondos": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idCliente": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "cuentaCartera": {
+      "type": "string",
+      "nullable": true
+    },
+    "monedaCaja": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
+Schema [RegistrarMovimientoCajaRequest]:
+{
+  "type": "object",
+  "properties": {
+    "idCartera": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "tipoMovimientoCaja": {
+      "type": "string",
+      "nullable": true
+    },
+    "monto": {
+      "type": "number",
+      "format": "double"
+    },
+    "moneda": {
+      "type": "string",
+      "nullable": true
+    },
+    "tipoCambio": {
+      "type": "number",
+      "format": "double",
+      "nullable": true
+    },
+    "monedaTipoCambioPar": {
+      "type": "string",
+      "nullable": true
+    },
+    "fechaMovimiento": {
+      "type": "string",
+      "format": "date-time",
+      "nullable": true
+    },
+    "idOperacionInstrumento": {
+      "type": "integer",
+      "format": "int64",
+      "nullable": true
+    },
+    "descripcion": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
+Schema [TraspasoCarteraRequest]:
+{
+  "type": "object",
+  "properties": {
+    "idCarteraOrigen": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idCarteraDestino": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "monto": {
+      "type": "number",
+      "format": "double"
+    },
+    "moneda": {
+      "type": "string",
+      "nullable": true
+    },
+    "fechaMovimiento": {
+      "type": "string",
+      "format": "date-time",
+      "nullable": true
+    },
+    "descripcion": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
