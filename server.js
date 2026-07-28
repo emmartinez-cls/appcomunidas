@@ -20,7 +20,7 @@ app.use('/api', createProxyMiddleware({
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Serve index.html for all other routes to support client-side routing (SPA)
-app.get('*', (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
