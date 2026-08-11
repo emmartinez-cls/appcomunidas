@@ -9,12 +9,19 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Proxy API requests
-app.use('/api', createProxyMiddleware({
+const apiProxy = createProxyMiddleware({
   target: 'http://invapi.appcls.cl',
   changeOrigin: true,
   secure: false,
-}));
+});
+
+// Proxy API requests (manually intercepting to prevent Express from stripping /api)
+app.use((req, res, next) => {
+  if (req.url.startsWith('/api')) {
+    return apiProxy(req, res, next);
+  }
+  next();
+});
 
 // Serve static assets from the dist directory
 app.use(express.static(path.join(__dirname, 'dist')));
