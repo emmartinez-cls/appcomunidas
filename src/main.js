@@ -4356,34 +4356,6 @@ function populateTiposMovimientoSelect() {
 }
 
 async function renderCaja() {
-  // 1. Render Balance Cards for the selected client
-  if (cajaBalancesGrid) {
-    cajaBalancesGrid.innerHTML = '';
-    const selectedClientId = localStorage.getItem('cliente_seleccionado_id') || '';
-    const clientCarteras = carterasList.filter(c => (c.idCliente || '').toString().toLowerCase() === selectedClientId.toString().toLowerCase() && c.activo !== false);
-    
-    if (clientCarteras.length === 0) {
-      cajaBalancesGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: var(--text-muted); background: rgba(255,255,255,0.01); border: 1px dashed var(--card-border); border-radius: 8px;">No se registran carteras activas para mostrar saldos.</div>`;
-    } else {
-      for (const cartera of clientCarteras) {
-        const balance = await fetchCarteraBalance(cartera.idCartera);
-        const card = document.createElement('div');
-        card.className = 'balance-card';
-        const carteraName = cartera.cuentaCartera || cartera.nombreCartera || `Cartera ${cartera.idCartera.substring(0, 8)}`;
-        
-        // Find AGF Name (case-insensitive for UUIDs)
-        const agfObj = admGralFondosList.find(a => a.idAdmGralFondos.toString().toLowerCase() === (cartera.idAdmGralFondos || '').toString().toLowerCase());
-        const agfName = agfObj ? (agfObj.nombreAdmGralFondos || agfObj.nombre) : (cartera.tipoCartera || 'Inversión');
-
-        card.innerHTML = `
-          <h5 class="balance-card-title">${carteraName}</h5>
-          <div class="balance-card-amount">${formatCLP(balance)}</div>
-          <span class="balance-card-type">${agfName}</span>
-        `;
-        cajaBalancesGrid.appendChild(card);
-      }
-    }
-  }
 
   // 2. Render Movements Table
   if (cajaMovementsTableBody) {
