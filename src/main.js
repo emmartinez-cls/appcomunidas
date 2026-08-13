@@ -4156,13 +4156,12 @@ async function renderCarteras(filterText = '') {
   }
 
   for (const cartera of clientCarteras) {
-    const balance = await fetchCarteraBalance(cartera.idCartera);
     const carteraName = cartera.cuentaCartera || cartera.nombreCartera || `Cartera ${cartera.idCartera.substring(0, 8)}`;
     
     // Add options to selects
     const opt = document.createElement('option');
     opt.value = cartera.idCartera;
-    opt.textContent = `${carteraName} (${formatCLP(balance)})`;
+    opt.textContent = carteraName;
     opt.style.background = 'var(--bg-card)';
     opt.style.color = 'var(--text-primary)';
     
