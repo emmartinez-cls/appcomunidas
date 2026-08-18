@@ -4389,9 +4389,11 @@ async function renderCaja() {
       const amountPrefix = isNegative ? '-' : '+';
       
       const dateVal = mov.fechaMovimiento || mov.fecha;
-      const dateStr = dateVal ? new Date(dateVal).toLocaleDateString('es-CL', {
-        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
-      }) : '-';
+      let dateStr = '-';
+      if (dateVal) {
+        const d = new Date(dateVal);
+        dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
       
       const descVal = mov.descripcion || mov.motivo || '-';
       const displayType = getFriendlyMovimientoLabel(typeVal);
@@ -5112,9 +5114,11 @@ function renderHistorialOperacionesTable(filterText = '') {
     const carteraName = cartObj ? (cartObj.cuentaCartera || cartObj.nombreCartera) : 'Cartera';
     
     const dateVal = mov.fechaMovimiento || mov.fecha;
-    const dateStr = dateVal ? new Date(dateVal).toLocaleDateString('es-CL', {
-      year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
-    }) : '-';
+    let dateStr = '-';
+    if (dateVal) {
+      const d = new Date(dateVal);
+      dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
     
     const typeVal = mov.tipoMovimientoCaja || mov.tipoMovimiento || '';
     const debitTypes = ['RETIRO', 'COMISION', 'COMPRA_INSTRUMENTO', 'DEBITO_AJUSTE', 'IMPUESTO', 'TRASPASO_OUT'];
